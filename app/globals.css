@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/*
+渐变颜色的使用方法：
+首先设定背景的颜色渐变起始点。
+然后把渐变颜色咬住文字进行变色
+最后对文字本身的颜色设置为透明
+*/
+.textGradient{
+  background: -webkit-linear-gradient(#4338ca,#818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color:transparent;
+}

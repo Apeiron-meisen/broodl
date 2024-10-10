@@ -6,7 +6,7 @@ export const metadata = {
   title:"Broodl ⋅ Dashboard"
 }
 export default function DashboardPage(){
-  const isAuthorized = false; // Add your authentication logic here
+  const isAuthorized = true; // Add your authentication logic here
   let children = (
     <Login/>
   )
