@@ -2,6 +2,8 @@ import localFont from "next/font/local";
 import { Fugaz_One,Open_Sans } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link';
+import { AuthProvider } from "@/context/AutoContext";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,15 +43,22 @@ const footer = (
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-      //flex-col指的是竖着排箱子
+      <AuthProvider>
+
+        <body
+        //flex-col指的是竖着排箱子
         className={'w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-700 ' + opensans.className}
-      >
-        {header}
-        {children}
-        {footer}
-        
-      </body>
+        >
+          {header}
+          {children}
+          {footer}
+          
+        </body>
+      </AuthProvider>
+      {/* 以下是字体的引入 
+        仔细看AuthProvider内部代码，先是把其包括的children作为参数引入，然后再返回children，一来一回多了一个<AuthContext.Provider value={value}>标签.
+        提问：如何使用携带的value数据呢？
+      */}
     </html>
   );
 }

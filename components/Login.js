@@ -1,7 +1,7 @@
 import React from 'react'
 import { Fugaz_One } from "next/font/google";
 const fugaz = Fugaz_One({subsets: ["latin"], weight: ["400"]});
-import Button from './button';
+import Button from './Button';
 export default function Login(){
   return (
     <div className="flex flex-col flex-1 justify-center items-center gap-4">
