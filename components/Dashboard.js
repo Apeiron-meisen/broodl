@@ -7,32 +7,35 @@ import Calendar from './Calendar';
 import { useAuth } from '@/context/AutoContext';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
+import Loading from './Loading';
+import Login from './Login';
 
 export default function Dashboard() {
-  const {currentUser, userDataObj, setUserDataObj} = useAuth()
+  const {currentUser, userDataObj, setUserDataObj,loading} = useAuth()
   const [data, setData] = useState({})
-  function countDays(){}
+  const now = new Date()
   async function handleSetMood(mood){
-    const now = new Date()
+    
     const day = now.getDate()
     const month = now.getMonth()
     const year = now.getFullYear()
 
     try{
+      const newData = {...userDataObj}
       if(!newData?.[year]){
         newData[year] = {}
       }
       if(!newData?.[year]?.[month]){
         newData[year][month] = {}
       }
-      const newData = {...userDataObj}
+      
       newData[year][month][day] = mood
       //update local data,to calendar
       setData(newData)
       //update global data
       setUserDataObj(newData)
       //update firebase
-      docRef = doc(db,'users',currentUser.uid)
+      const docRef = doc(db,'users',currentUser.uid)
       //直接把data扔进firestore去更新，效率低.因为它会遍历data中的每一个值去创建新的，然后替代旧的
       // const response =await setDoc(docRef,newData)
       const response = await setDoc(docRef,{
@@ -47,11 +50,23 @@ export default function Dashboard() {
     }
   }
 
-
+  function countDaysAndMoods(){
+    let totalDays = 0
+    let totalMoods = 0
+    for (let year in data){
+      for (let month in data[year]){
+        for (let day in data[year][month]){
+          const mood = data[year][month][day]
+          totalDays++
+          totalMoods += mood
+        }
+      }
+    }
+  return {"累計日数":totalDays,"平均ムード": ((totalMoods/totalDays)||0).toFixed(1)}
+  }
   const statuses = {
-    num_days :14,
-    time_remaining :"13:14:26",
-    date : (new Date()).toDateString()
+    ...countDaysAndMoods(),
+    "本日残り時間" : `${23-now.getHours()} 時 ${60-now.getMinutes()} 分`
   }
   const emotions = {
     "Extremely sad":"😭",
@@ -66,6 +81,13 @@ export default function Dashboard() {
     }
     setData(userDataObj)
   },[currentUser,userDataObj])
+  if(loading){
+    return <Loading/>
+  }
+  if(!currentUser){
+    return <Login/>
+  }
+  
 
 //需要把json变成array。 key就是json中的key，拿到key之后去遍历map，对于每一个key执行固定函数并用列表储存每一个对应的结果。最后对于每一个输出内容，用一个div进行包裹，指定它的key=index
 //flex flex-col gap-1 sm:gap-2,目的是让元素上下排列然后上下的gap更大一点
@@ -79,7 +101,7 @@ export default function Dashboard() {
           return (
             <div key={statusindex} className='p-4 flex flex-col gap-1 sm:gap-2'>
               <p  className="font-medium uppercase text-xs sm:text-sm truncate ">{status.replace("_"," ")}</p>
-              <p className={'text-base sm:text-lg truncate '+ fugaz.className}>{statuses[status]}</p>
+              <p className={'text-base sm:text-lg truncate '+ fugaz.className}>{statuses[status]}{status==='累計日数'?"🔥":""}</p>
             </div>
           )
         })}
@@ -91,7 +113,7 @@ export default function Dashboard() {
         {Object.keys(emotions).map((emotion, index)=>{
           return (
             //只能传递函数，但如果函数有参数要传，你肯定不能写handlerset(param)，这样你传入是函数返回值，不是函数本身。必须用新匿名函数包裹它
-            <button onclick={()=>{
+            <button onClick={()=>{
               //因为mood的取值是1-5，但index取值范围是0-4
               const currentMotionVal = index + 1
               handleSetMood(currentMotionVal)
@@ -104,7 +126,7 @@ export default function Dashboard() {
         
       }
       </div>
-      <Calendar data={data} handleSetMood={handleSetMood}/>
+      <Calendar completeData={data} handleSetMood={handleSetMood}/>
     </div>
   )
 }

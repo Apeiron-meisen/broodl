@@ -16,7 +16,7 @@ export function AuthProvider({children}){
   //下面这么写也行，都行
   // const {children} = props
   const [currentUser, setCurrentUser] = useState(null)
-  const [useDataObj, setUserDataObj] = useState(null)
+  const [userDataObj, setUserDataObj] = useState(null)
   const [loading, setLoading] = useState(true)
 
   // Auth handlers
@@ -27,7 +27,7 @@ export function AuthProvider({children}){
     return signInWithEmailAndPassword(auth, email, password)
   }
   function logout(){
-    setUseDataObj({})
+    setUserDataObj({})
     setCurrentUser(null)
     return signOut(auth)
   }
@@ -66,7 +66,7 @@ export function AuthProvider({children}){
 
   const value = {
     currentUser,
-    useDataObj,
+    userDataObj,
     setUserDataObj,
     signup,
     logout,

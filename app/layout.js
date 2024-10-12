@@ -3,7 +3,8 @@ import { Fugaz_One,Open_Sans } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link';
 import { AuthProvider } from "@/context/AutoContext";
-
+import Head from "./head";
+import Logout from "@/components/Logout";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,9 +29,7 @@ const header = (
     <Link href={'/'}>
       <h1 className={'text-base sm:text-lg textGradient ' +fugaz.className}>Broodl</h1>
     </Link>
-    <div className='flex items-center justify-between'>
-      placeholder
-    </div>
+    <Logout/>
   </header>
 )
 //place-items-center把矩阵中的东西放在中心位置
@@ -43,6 +42,7 @@ const footer = (
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <Head/>
       <AuthProvider>
 
         <body

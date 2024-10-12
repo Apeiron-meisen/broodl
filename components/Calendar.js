@@ -1,7 +1,7 @@
 'use client'
 import React,{useState} from 'react'
 import { Fugaz_One } from 'next/font/google'
-import { gradients, baseRating,demoData } from '@/utils'
+import { gradients, baseRating } from '@/utils'
 const months = { 'January': 'Jan', 'February': 'Feb', 'March': 'Mar', 'April': 'Apr', 'May': 'May', 'June': 'Jun', 'July': 'Jul', 'August': 'Aug', 'September': 'Sept', 'October': 'Oct', 'November': 'Nov', 'December': 'Dec' }
 const monthsArr = Object.keys(months)
 const now = new Date()
@@ -9,12 +9,13 @@ const dayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday
 
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ['400'] });
 export default function Calendar(props) {
-  const {demo, data, handleSetMood} = props;
+  const {demo, completeData, handleSetMood} = props;
   const now = new Date()
   const defaultMonth = now.getMonth()
-  
+  // selectedMonth是用文字表述的，可不是index哟
   const [selectedMonth, setSelectedMonth] =useState(Object.keys(months)[defaultMonth])
   const [selectedYear, setSelectedYear] =useState(now.getFullYear())
+  const data = completeData?.[selectedYear]?.[monthsArr.indexOf(selectedMonth)] || {}
   function handleIncrementMonth(val){
     // +1 or -1
   }
@@ -58,7 +59,7 @@ export default function Calendar(props) {
                 }
                 //对日期背景的颜色渐变进行设定
                 //如果是demo，那就用默认rating进行上色。如果不是，查日期是否在数据中有对应值，有就用，没有就white
-                let color = demo? gradients.indigo[baseRating[dayIndex]]:(dayIndex in demoData?gradients.indigo[demoData[dayIndex]]:'white')
+                let color = demo? gradients.indigo[baseRating[dayIndex]]:(dayIndex in data?gradients.indigo[data[dayIndex]]:'white')
                 //这里的style就是添加了css内容，设置了background
                 return (
                   <div style={{background:color}}  className={"border border-solid p-2 flex flex-col items-center text-xs sm:text-sm gap-2 justify-between rounded-lg " + (isToday?"border-indigo-400 ":"border-indigo-100 "+(color==='white'?'text-indigo-400':'text-white'))} key={dayOfWeekIndex}>
