@@ -12,9 +12,11 @@ export function useAuth(){
   return useContext(AuthContext)
 }
 
-export function AuthProvider(children){
+export function AuthProvider({children}){
+  //下面这么写也行，都行
+  // const {children} = props
   const [currentUser, setCurrentUser] = useState(null)
-  const [useDataObj, setUseDataObj] = useState({})
+  const [useDataObj, setUserDataObj] = useState(null)
   const [loading, setLoading] = useState(true)
 
   // Auth handlers
@@ -37,7 +39,10 @@ export function AuthProvider(children){
         // set use to local context state
         setLoading(true)
         setCurrentUser(user)
-        if (!user){return}
+        if (!user){
+          console.log("no user found!")
+          return
+        }
 
         //if user exists, fetch data from firebase database
         console.log("fetching user data from firebase")
@@ -48,7 +53,7 @@ export function AuthProvider(children){
           console.log("found user data!")
           firebaseData = docSnap.data()
         }
-        setUseDataObj(firebaseData)
+        setUserDataObj(firebaseData)
 
       }catch(err){
         console.log(err.message)
@@ -62,6 +67,7 @@ export function AuthProvider(children){
   const value = {
     currentUser,
     useDataObj,
+    setUserDataObj,
     signup,
     logout,
     login,

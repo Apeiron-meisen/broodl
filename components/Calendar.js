@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React,{useState} from 'react'
 import { Fugaz_One } from 'next/font/google'
 import { gradients, baseRating,demoData } from '@/utils'
 const months = { 'January': 'Jan', 'February': 'Feb', 'March': 'Mar', 'April': 'Apr', 'May': 'May', 'June': 'Jun', 'July': 'Jul', 'August': 'Aug', 'September': 'Sept', 'October': 'Oct', 'November': 'Nov', 'December': 'Dec' }
@@ -8,14 +9,24 @@ const dayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday
 
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ['400'] });
 export default function Calendar(props) {
-  const {demo} = props;
-  const year =2024
-  const month = 'July'
-  const monthNow = new Date(year, monthsArr.indexOf(month), 1)
+  const {demo, data, handleSetMood} = props;
+  const now = new Date()
+  const defaultMonth = now.getMonth()
+  
+  const [selectedMonth, setSelectedMonth] =useState(Object.keys(months)[defaultMonth])
+  const [selectedYear, setSelectedYear] =useState(now.getFullYear())
+  function handleIncrementMonth(val){
+    // +1 or -1
+  }
+
+
+  // const year =2024
+  // const month = 'July'
+  const monthNow = new Date(selectedYear, monthsArr.indexOf(selectedMonth), 1)
   
   //确定第一天是第一周的第几天，返回一周的第几天序列值
   const firstDayOfMonth = monthNow.getDay() //从0开始算
-  const daysInMonth = new Date(year,monthsArr.indexOf(month) + 1, 0).getDate()
+  const daysInMonth = new Date(selectedYear,monthsArr.indexOf(selectedMonth) + 1, 0).getDate()
   
   const daysToDisplay = firstDayOfMonth + daysInMonth
   const numRows = (Math.floor(daysToDisplay / 7)) + (daysToDisplay%7?1:0)
