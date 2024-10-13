@@ -46,7 +46,7 @@ export default function Login(){
   return (
     <div className="flex flex-col flex-1 justify-center items-center gap-4">
       <h3 className={'text-4xl sm:text-5xl md:text-6xl '+ fugaz.className}>{isRegister?'Register':"Log In"}</h3>
-      <p>You&#39re one step away!</p>
+      <p>You are one step away!</p>
       <input value={email} onChange={(event)=>{
         setEmail(event.target.value)
       }} className="w-full max-w-[400px] mx-auto px-4 py-2 sm:py-3 border border-solid border-indigo-400 rounded-full outline-none duration-200 hover:border-indigo-800" placeholder="Email"/>
