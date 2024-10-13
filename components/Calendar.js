@@ -17,6 +17,7 @@ export default function Calendar(props) {
   const [selectedYear, setSelectedYear] =useState(now.getFullYear())
   const numericSelectedMonth = monthsArr.indexOf(selectedMonth)
   const data = completeData?.[selectedYear]?.[numericSelectedMonth] || {}
+  
   //增减月份显示的按钮
   function handleIncrementMonth(val){
     // +1 or -1
@@ -63,11 +64,11 @@ export default function Calendar(props) {
       <div className='grid grid-cols-3 gap-1 '>
         <button onClick={()=>{
           return handleIncrementMonth(-1)
-        }}><i className="fa-solid fa-arrow-left"></i></button>
+        }}><i className="fa-solid fa-arrow-left hover:opacity-60 text-2xl textGradient"></i></button>
         <p className={"text-center text-2xl textGradient " + fugaz.className}>{selectedMonth} {selectedYear}</p>
         <button onClick={()=>{
           handleIncrementMonth(1)
-        }}><i className="fa-solid fa-arrow-right"></i></button>
+        }}><i className="fa-solid fa-arrow-right hover:opacity-60 text-2xl textGradient"></i></button>
       </div>
       <div className= 'flex flex-col overflow-hidden gap-1 py-2 sm:py-4 md:py-10'>
         {
